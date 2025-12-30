@@ -1,0 +1,250 @@
+:root {
+  --fo-font-family: "SN Pro", "Inter", "SF Pro Display", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --fo-surface: rgba(255, 255, 255, 0.86);
+  --fo-surface-strong: rgba(255, 255, 255, 0.94);
+  --fo-surface-subtle: rgba(255, 255, 255, 0.72);
+  --fo-border: rgba(12, 10, 9, 0.08);
+  --fo-border-strong: rgba(12, 10, 9, 0.12);
+  --fo-muted: #5a6373;
+  --fo-text: #0c0a09;
+  --fo-accent: #0a84ff;
+  --fo-accent-strong: #0668e3;
+  --fo-warm: #ff5c00;
+  --fo-shadow: 0 24px 90px -52px rgba(6, 15, 38, 0.55);
+  --fo-header-height: 76px;
+  --fo-sidebar-width: 280px;
+}
+
+body {
+  background: radial-gradient(circle at 20% 20%, rgba(10, 132, 255, 0.08), transparent 26%),
+    radial-gradient(circle at 80% 0%, rgba(255, 92, 0, 0.08), transparent 30%),
+    linear-gradient(180deg, #f6f8fb 0%, #f2f5fa 30%, #eef1f7 100%);
+  color: var(--fo-text);
+  font-family: var(--fo-font-family);
+  letter-spacing: -0.01em;
+}
+
+.folo-shell {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.folo-shell__body {
+  gap: 20px;
+  padding-left: calc(var(--fo-sidebar-width) + 24px);
+  padding-right: 20px;
+}
+
+.folo-panel {
+  background: var(--fo-surface);
+  border: 1px solid var(--fo-border);
+  border-radius: 18px;
+  box-shadow: var(--fo-shadow);
+  backdrop-filter: blur(16px);
+}
+
+.folo-topbar {
+  height: var(--fo-header-height);
+  padding: 10px 18px;
+}
+
+.folo-topbar__frame {
+  align-items: center;
+  gap: 14px;
+  border-radius: 18px;
+  background: var(--fo-surface-strong);
+  border: 1px solid var(--fo-border);
+  box-shadow: 0 14px 45px -32px rgba(7, 16, 33, 0.45);
+  backdrop-filter: blur(14px);
+  padding: 10px 14px;
+}
+
+.folo-brand {
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(10, 132, 255, 0.12), rgba(255, 92, 0, 0.08));
+  border: 1px solid rgba(10, 132, 255, 0.08);
+}
+
+.folo-shell__sidebar {
+  position: fixed;
+  left: 0;
+  top: calc(var(--fo-header-height) + 14px);
+  width: var(--fo-sidebar-width);
+  height: calc(100% - var(--fo-header-height) - 28px);
+  padding: 14px;
+  overflow-y: auto;
+  background: var(--fo-surface);
+  border-right: 1px solid var(--fo-border);
+  border-radius: 18px;
+  box-shadow: var(--fo-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.folo-shell__content {
+  padding: 6px 0 32px 0;
+}
+
+.folo-nav-section {
+  margin-bottom: 16px;
+}
+
+.folo-nav-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--fo-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 8px 6px;
+  text-transform: uppercase;
+}
+
+.folo-nav-card {
+  border: 1px solid var(--fo-border);
+  border-radius: 14px;
+  padding: 6px;
+  background: var(--fo-surface-strong);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.folo-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  color: var(--fo-text);
+  border-radius: 12px;
+  transition: all 0.18s ease;
+  border: 1px solid transparent;
+}
+
+.folo-nav-item:hover {
+  background: linear-gradient(90deg, rgba(10, 132, 255, 0.08), rgba(255, 92, 0, 0.05));
+  border-color: rgba(10, 132, 255, 0.12);
+  transform: translateX(2px);
+}
+
+.folo-nav-item__icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(10, 132, 255, 0.08);
+  color: var(--fo-accent);
+}
+
+.folo-nav-item__label {
+  flex: 1;
+  font-weight: 600;
+}
+
+.folo-nav-item__badge {
+  min-width: 26px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(10, 132, 255, 0.12);
+  color: var(--fo-accent-strong);
+  font-weight: 700;
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.folo-search {
+  border-radius: 12px;
+  border: 1px solid rgba(12, 10, 9, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 249, 252, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 12px 30px -22px rgba(7, 16, 33, 0.55);
+}
+
+.folo-search:focus-within {
+  border-color: rgba(10, 132, 255, 0.4);
+  box-shadow:
+    0 12px 36px -26px rgba(6, 25, 55, 0.85),
+    0 0 0 1px rgba(10, 132, 255, 0.22);
+}
+
+.folo-subheader {
+  background: var(--fo-surface-strong);
+  border: 1px solid var(--fo-border);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px -32px rgba(8, 14, 32, 0.55);
+}
+
+.folo-chip {
+  border-radius: 12px;
+  padding: 6px 10px;
+  background: rgba(10, 132, 255, 0.08);
+  color: var(--fo-text);
+  border: 1px solid rgba(10, 132, 255, 0.18);
+}
+
+.folo-icon-btn {
+  background: transparent;
+  border-radius: 12px !important;
+  border: 1px solid rgba(12, 10, 9, 0.08);
+  transition: all 0.16s ease;
+}
+
+.folo-icon-btn:hover {
+  background: rgba(10, 132, 255, 0.1);
+  border-color: rgba(10, 132, 255, 0.4);
+}
+
+.folo-page-card {
+  border-radius: 16px;
+  border: 1px solid var(--fo-border);
+  background: var(--fo-surface-strong);
+  box-shadow: var(--fo-shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.folo-page-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(10, 132, 255, 0.2);
+  box-shadow: 0 22px 60px -42px rgba(7, 18, 43, 0.65);
+}
+
+.folo-page-card--active {
+  border-color: rgba(10, 132, 255, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(10, 132, 255, 0.35),
+    0 26px 66px -42px rgba(7, 18, 43, 0.65);
+}
+
+.folo-sticky-panel {
+  position: sticky;
+  top: calc(var(--fo-header-height) + 16px);
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --fo-header-height: 72px;
+    --fo-sidebar-width: 248px;
+  }
+
+  .folo-shell__body {
+    padding-left: 0;
+  }
+
+  .folo-shell__sidebar {
+    position: fixed;
+    transform: translateX(-110%);
+    transition: transform 0.18s ease;
+  }
+
+  #root.toggle-sidebar .folo-shell__sidebar {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 900px) {
+  body {
+    background: #f6f8fb;
+  }
+}

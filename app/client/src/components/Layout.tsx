@@ -25,13 +25,13 @@ const Layout = () => {
             location.key;
         }}
       />
-      <div className="h-full layoutRoot">
+      <div className="h-full layoutRoot folo-shell">
         <Header />
-        <div className="main_window flex flex-row">
-          <div className="main_sidebar">
+        <div className="main_window folo-shell__body flex flex-row">
+          <div className="main_sidebar folo-shell__sidebar folo-panel">
             <Sidebar/>
           </div>
-          <div className="flex-auto">
+          <div className="flex-auto folo-shell__content">
             <Outlet/>
           </div>
         </div>

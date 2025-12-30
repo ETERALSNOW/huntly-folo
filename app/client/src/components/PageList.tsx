@@ -430,9 +430,9 @@ const PageList = (props: PageListProps) => {
       <SubHeader navLabel={navLabel} onMarkListAsRead={markListAsRead} onMarkAllAsRead={markAllAsRead}
                  onRefresh={refreshPages} navLabelArea={navLabelArea}
                  buttonOptions={buttonOptions}/>
-      <div className={'flex flex-auto'}>
+      <div className={'flex flex-auto gap-4'}>
         <div className="p-2 flex flex-col grow items-center">
-          <div className={'page-list w-[720px] flex flex-col items-center'} ref={pageListRef}>
+          <div className={'page-list w-full max-w-[920px] flex flex-col items-center gap-3'} ref={pageListRef}>
             {showDoneTip && <div className={'w-full'}>
                 <TransitionAlert severity="success" color="info">
                     <AlertTitle>Well done!</AlertTitle>
@@ -491,8 +491,8 @@ const PageList = (props: PageListProps) => {
             }
           </div>
         </div>
-        <div className={'filter-options w-[320px] sticky mt-3 top-28 self-start'}>
-          {props.filterComponent}
+        <div className={'filter-options w-[320px] folo-sticky-panel mt-3 self-start'}>
+          {props.filterComponent && <div className="folo-panel p-3">{props.filterComponent}</div>}
         </div>
       </div>
     </>
