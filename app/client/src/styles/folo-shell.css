@@ -83,9 +83,25 @@ body {
   box-shadow: var(--fo-shadow);
   backdrop-filter: blur(20px);
 }
+.main_sidebar.is-collapsed {
+  width: 76px;
+  padding-right: 8px;
+}
+.folo-shell.sidebar-collapsed .folo-shell__sidebar {
+  width: 76px;
+  padding: 10px 8px;
+}
+
+.folo-shell.sidebar-collapsed .main_window {
+  padding-left: 96px;
+}
 
 .folo-shell__content {
   padding: 6px 0 32px 0;
+}
+
+.right-panel-collapsed .filter-options {
+  display: none;
 }
 
 .folo-nav-section {

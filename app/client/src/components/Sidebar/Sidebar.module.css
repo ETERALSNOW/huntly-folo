@@ -1,6 +1,24 @@
 .sidebar {
   @apply text-[0.85rem];
 }
+.collapsed {
+  width: 68px;
+  padding-right: 0;
+}
+.collapsed .folo-nav-title {
+  display: none;
+}
+.collapsed .folo-nav-card {
+  padding: 0;
+}
+.collapsed .folo-nav-item {
+  padding: 8px;
+  justify-content: center;
+}
+.collapsed .folo-nav-item__label,
+.collapsed .folo-nav-item__badge {
+  display: none;
+}
 .sidebox {
   @apply border-b-gray-300 pb-3 pt-2;
   border-bottom-width: 1px;

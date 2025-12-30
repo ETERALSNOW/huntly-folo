@@ -12,10 +12,19 @@ import {useLocation} from "react-router-dom";
 import navLabels from "./NavLabels";
 import {ConnectorType} from "../../interfaces/connectorType";
 import SettingModal from "../SettingModal";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
-const Sidebar = () => {
+type SidebarProps = {
+  collapsed?: boolean
+}
+
+const Sidebar = ({collapsed}: SidebarProps) => {
   const location = useLocation();
+  const [collapseState, setCollapseState] = useState<boolean>(!!collapsed);
+
+  useEffect(() => {
+    setCollapseState(!!collapsed);
+  }, [collapsed]);
 
   function leadingHeader(leadingText) {
     return <div className={'folo-nav-title'}>
@@ -105,8 +114,6 @@ const Sidebar = () => {
   }
 
   const {
-    isLoading,
-    error,
     data: view,
   } = useQuery(['folder-connector-view'], async () => (await
     ConnectorControllerApiFactory().getFolderConnectorViewUsingGET()).data, {
@@ -132,7 +139,12 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className={`${styles.sidebar} pb-14 space-y-4`}>
+    <div className={`${styles.sidebar} pb-14 space-y-4 ${collapseState ? styles.collapsed : ''}`}>
+      <div className="folo-nav-section">
+        {leadingHeader('FEEDS')}
+        {view && view.folderConnectors && folderConnectorsView(view.folderFeedConnectors, true)}
+      </div>
+
       <div className="folo-nav-section">
         <div className="folo-nav-card">
           <LibraryNavTree selectedNodeId={location.pathname}/>
@@ -142,11 +154,6 @@ const Sidebar = () => {
       <div className="folo-nav-section">
         {leadingHeader('CONNECT')}
         {view && view.folderConnectors && folderConnectorsView(view.folderConnectors, false)}
-      </div>
-
-      <div className="folo-nav-section">
-        {leadingHeader('FEEDS')}
-        {view && view.folderConnectors && folderConnectorsView(view.folderFeedConnectors, true)}
       </div>
 
       {

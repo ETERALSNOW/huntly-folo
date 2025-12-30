@@ -1,5 +1,4 @@
 import EnergySavingsLeafIcon from "@mui/icons-material/EnergySavingsLeaf";
-import SearchBox from "./SearchBox";
 import React, {useCallback, useEffect, useState} from "react";
 import {WindowStateListenerType} from "../domain/electronTypes";
 import {IconButton} from "@mui/material";
@@ -7,10 +6,13 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import SettingModal from "./SettingModal";
 
-export default function Header() {
+type HeaderProps = {
+  onSidebarToggle?: () => void;
+  sidebarCollapsed?: boolean;
+}
+
+export default function Header({onSidebarToggle, sidebarCollapsed}: HeaderProps) {
   const [winMaximized, setWinMaximized] = useState(false);
-  const [fullScreen, setFullScreen] = useState(false);
-  const [focused, setFocused] = useState(false);
   const [settingModalOpen, setSettingModalOpen] = useState(false);
   const inElectron = !!window.electron;
   const isMac = inElectron && window.electron.utilsBridge.isMac;
@@ -25,12 +27,6 @@ export default function Header() {
         switch (type) {
           case WindowStateListenerType.Maximized:
             setWinMaximized(state);
-            break;
-          case WindowStateListenerType.Fullscreen:
-            setFullScreen(state);
-            break;
-          case WindowStateListenerType.Focused:
-            setFocused(state);
             break;
         }
       }
@@ -59,34 +55,31 @@ export default function Header() {
   function toggleSidebar() {
     const rootEl = document.getElementById('root');
     rootEl?.classList.toggle('toggle-sidebar');
+    onSidebarToggle?.();
   }
 
   return <header className="title_bar folo-topbar">
-    <div className="folo-topbar__frame flex w-full">
-      {!isMac && (
-        <span className="logo-area nodrag flex items-center text-sky-600 font-bold">
-          <span className={'slide-button'}>
-            <IconButton onClick={toggleSidebar} className="folo-icon-btn">
-              <DehazeIcon/>
-            </IconButton>
-          </span>
-          <span className="folo-brand hidden lg:flex">
-            <EnergySavingsLeafIcon className="h-6 w-6 mr-1"/>
-            <span className={'logo-text text-slate-800'}>
-              Huntly
+    <div className="folo-topbar__frame flex w-full items-center gap-3">
+      <div className="flex items-center gap-2">
+        <IconButton aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'} className="folo-icon-btn" onClick={toggleSidebar}>
+          <DehazeIcon/>
+        </IconButton>
+        {!isMac && (
+          <span className="logo-area nodrag flex items-center text-sky-600 font-bold">
+            <span className="folo-brand hidden lg:flex">
+              <EnergySavingsLeafIcon className="h-6 w-6 mr-1"/>
+              <span className={'logo-text text-slate-800'}>
+                Huntly
+              </span>
             </span>
           </span>
-        </span>
-      )}
+        )}
+      </div>
 
-      <SearchBox/>
-
-      <div className="nodrag flex items-center gap-2">
-        {
-          (!inElectron || isMac) && <IconButton className={'setting-area folo-icon-btn'} onClick={openSettingModal}>
-            <SettingsOutlinedIcon className={'text-sky-600'}/>
-          </IconButton>
-        }
+      <div className="nodrag flex items-center gap-2 ml-auto">
+        <IconButton className={'setting-area folo-icon-btn'} onClick={openSettingModal} aria-label="Settings">
+          <SettingsOutlinedIcon className={'text-sky-600'}/>
+        </IconButton>
 
         {!isMac && inElectron && (
           <div className="flex items-center gap-1">

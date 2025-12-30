@@ -56,6 +56,8 @@ function App() {
           window.location.href = `/signin?${createSearchParams({
             'from': location.pathname,
           })}`;
+        } else if (location.pathname === '/') {
+          window.location.replace('/feeds');
         }
       });
     }
