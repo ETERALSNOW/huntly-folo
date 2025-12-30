@@ -4,7 +4,7 @@ import {InfiniteData, QueryClient, useInfiniteQuery, useQueryClient} from "@tans
 import {useInView} from "react-intersection-observer";
 import React, {ReactElement, useEffect, useState, useRef, useCallback, useMemo} from "react";
 import {AlertTitle, Button} from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import {useFilterPanel} from "../contexts/FilterPanelContext";
 import Loading from "./Loading";
 import {NavLabel} from "./Sidebar/NavLabels";
 import SubHeader, {ButtonOptions} from "./SubHeader";
@@ -71,15 +71,11 @@ const PageList = (props: PageListProps) => {
   const queryClient = useQueryClient();
   const [params, setParams] = useSearchParams();
   const { markReadOnScroll } = useGlobalSettings();
-  const isNarrow = useMediaQuery("(max-width:1024px)");
+  const { setFilterContent } = useFilterPanel();
 
   // ============ Basic State ============
   const selectedPageId = safeInt(params.get("p"));
   const propFilters = useMemo(() => props.filters || {}, [props.filters]);
-  const [rightCollapsed, setRightCollapsed] = useState<boolean>(() => {
-    const stored = localStorage.getItem('ui.rightPanelCollapsed');
-    return stored === 'true';
-  });
   const [filters, setFilters] = useState<PageListFilter>(propFilters);
   const [showDoneTip, setShowDoneTip] = useState(false);
   const [lastVisitPageId, setLastVisitPageId] = useState(0);
@@ -403,14 +399,9 @@ const PageList = (props: PageListProps) => {
 
   // ============ Effects ============
   useEffect(() => {
-    if (isNarrow) {
-      return;
-    }
-    const stored = localStorage.getItem('ui.rightPanelCollapsed');
-    if (stored != null) {
-      setRightCollapsed(stored === 'true');
-    }
-  }, [isNarrow]);
+    setFilterContent(props.filterComponent || null);
+    return () => setFilterContent(null);
+  }, [props.filterComponent, setFilterContent]);
   // if there is no un read pages, then load all pages
   if (filters.markRead === false && data && data.pages && (data.pages.length === 0 || data.pages[0].length === 0)) {
     setShowDoneTip(true);
@@ -445,7 +436,7 @@ const PageList = (props: PageListProps) => {
       <SubHeader navLabel={navLabel} onMarkListAsRead={markListAsRead} onMarkAllAsRead={markAllAsRead}
                  onRefresh={refreshPages} navLabelArea={navLabelArea}
                  buttonOptions={buttonOptions}/>
-      <div className={`flex flex-auto ${!isNarrow && !rightCollapsed ? 'gap-4' : 'gap-2'} ${rightCollapsed ? 'right-panel-collapsed' : ''}`}>
+      <div className={`flex flex-auto gap-4`}>
         <div className="p-2 flex flex-col grow items-center">
           <div className={'page-list w-full max-w-[920px] flex flex-col items-center gap-3'} ref={pageListRef}>
             {showDoneTip && <div className={'w-full'}>
@@ -505,31 +496,6 @@ const PageList = (props: PageListProps) => {
                 </>
             }
           </div>
-        </div>
-        {!isNarrow && (
-          <>
-            <div className={`filter-options w-[320px] folo-sticky-panel mt-3 self-start ${rightCollapsed ? 'hidden' : ''}`}>
-              {props.filterComponent && <div className="folo-panel p-3 relative">
-                <div className="absolute right-2 top-2">
-                  <Button size="small" onClick={() => {
-                    const next = !rightCollapsed;
-                    setRightCollapsed(next);
-                    localStorage.setItem('ui.rightPanelCollapsed', next ? 'true' : 'false');
-                  }}>Hide</Button>
-                </div>
-                {props.filterComponent}
-              </div>}
-            </div>
-            {rightCollapsed && (
-              <div className="mt-3 self-start">
-                <Button size="small" variant="outlined" onClick={() => {
-                  setRightCollapsed(false);
-                  localStorage.setItem('ui.rightPanelCollapsed', 'false');
-                }}>Show filters</Button>
-              </div>
-            )}
-          </>
-        )}
         </div>
       </div>
     </>

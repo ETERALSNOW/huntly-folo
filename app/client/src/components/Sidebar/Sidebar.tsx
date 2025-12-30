@@ -13,6 +13,7 @@ import navLabels from "./NavLabels";
 import {ConnectorType} from "../../interfaces/connectorType";
 import SettingModal from "../SettingModal";
 import {useCallback, useEffect, useState} from "react";
+import {useFilterPanel} from "../../contexts/FilterPanelContext";
 
 type SidebarProps = {
   collapsed?: boolean
@@ -21,6 +22,7 @@ type SidebarProps = {
 const Sidebar = ({collapsed}: SidebarProps) => {
   const location = useLocation();
   const [collapseState, setCollapseState] = useState<boolean>(!!collapsed);
+  const {filterContent} = useFilterPanel();
 
   useEffect(() => {
     setCollapseState(!!collapsed);
@@ -125,14 +127,14 @@ const Sidebar = ({collapsed}: SidebarProps) => {
   const [settingIndex, setSettingIndex] = useState(0);
 
   const openConnectSettingModal = useCallback(() => {
-    setSettingIndex(2);
+    setSettingIndex(filterContent ? 3 : 2);
     setSettingModalOpen(true);
-  }, []);
+  }, [filterContent]);
 
   const openFeedsSettingModal = useCallback(() => {
-    setSettingIndex(3);
+    setSettingIndex(filterContent ? 4 : 3);
     setSettingModalOpen(true);
-  }, []);
+  }, [filterContent]);
 
   const closeSettingModal = useCallback(() => {
     setSettingModalOpen(false);

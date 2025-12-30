@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {
   Box,
   List,
@@ -19,6 +19,8 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import GeneralSetting from "./GeneralSetting";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ArticleShortcutSetting from "./ArticleShortcutSetting";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import {useFilterPanel} from "../../contexts/FilterPanelContext";
 
 type SettingModalProps = {
   open: boolean,
@@ -28,6 +30,17 @@ type SettingModalProps = {
 
 export default function SettingModal(props: SettingModalProps) {
   const [selectedIndex, setSelectedIndex] = React.useState(props.defaultIndex || 0);
+  const {filterContent} = useFilterPanel();
+
+  React.useEffect(() => {
+    if (!filterContent) {
+      setSelectedIndex(prev => {
+        if (prev === 1) return 0;
+        if (prev > 1) return prev - 1;
+        return prev;
+      });
+    }
+  }, [filterContent]);
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -65,9 +78,20 @@ export default function SettingModal(props: SettingModalProps) {
               </ListItemIcon>
               <ListItemText primary="General"/>
             </ListItemButton>
+            {filterContent && (
+              <ListItemButton
+                selected={selectedIndex === 1}
+                onClick={(event) => handleListItemClick(event, 1)}
+              >
+                <ListItemIcon>
+                  <FilterAltIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Filters"/>
+              </ListItemButton>
+            )}
             <ListItemButton
-              selected={selectedIndex === 1}
-              onClick={(event) => handleListItemClick(event, 1)}
+              selected={selectedIndex === (filterContent ? 2 : 1)}
+              onClick={(event) => handleListItemClick(event, filterContent ? 2 : 1)}
             >
               <ListItemIcon>
                 <AutoAwesomeIcon sx={{ fill: "url(#geminiGradientSettings)" }} />
@@ -75,8 +99,8 @@ export default function SettingModal(props: SettingModalProps) {
               <ListItemText primary="AI Shortcuts"/>
             </ListItemButton>
             <ListItemButton
-              selected={selectedIndex === 2}
-              onClick={(event) => handleListItemClick(event, 2)}
+              selected={selectedIndex === (filterContent ? 3 : 2)}
+              onClick={(event) => handleListItemClick(event, filterContent ? 3 : 2)}
             >
               <ListItemIcon>
                 <HubIcon/>
@@ -84,8 +108,8 @@ export default function SettingModal(props: SettingModalProps) {
               <ListItemText primary="Connect"/>
             </ListItemButton>
             <ListItemButton
-              selected={selectedIndex === 3}
-              onClick={(event) => handleListItemClick(event, 3)}
+              selected={selectedIndex === (filterContent ? 4 : 3)}
+              onClick={(event) => handleListItemClick(event, filterContent ? 4 : 3)}
             >
               <ListItemIcon>
                 <RssFeedIcon/>
@@ -93,8 +117,8 @@ export default function SettingModal(props: SettingModalProps) {
               <ListItemText primary="Feeds"/>
             </ListItemButton>
             <ListItemButton
-              selected={selectedIndex === 4}
-              onClick={(event) => handleListItemClick(event, 4)}
+              selected={selectedIndex === (filterContent ? 5 : 4)}
+              onClick={(event) => handleListItemClick(event, filterContent ? 5 : 4)}
             >
               <ListItemIcon>
                 <FolderOpenIcon/>
@@ -102,8 +126,8 @@ export default function SettingModal(props: SettingModalProps) {
               <ListItemText primary="Folders"/>
             </ListItemButton>
             <ListItemButton
-              selected={selectedIndex === 5}
-              onClick={(event) => handleListItemClick(event, 5)}
+              selected={selectedIndex === (filterContent ? 6 : 5)}
+              onClick={(event) => handleListItemClick(event, filterContent ? 6 : 5)}
             >
               <ListItemIcon>
                 <AccountBoxIcon/>
@@ -115,24 +139,13 @@ export default function SettingModal(props: SettingModalProps) {
 
         <div className={'grow'}>
           <div className={'p-4'}>
-            {
-              selectedIndex === 0 && <GeneralSetting/>
-            }
-            {
-              selectedIndex === 1 && <ArticleShortcutSetting/>
-            }
-            {
-              selectedIndex === 2 && <ConnectorSetting/>
-            }
-            {
-              selectedIndex === 3 && <FeedsSetting/>
-            }
-            {
-              selectedIndex === 4 && <FoldersSetting/>
-            }
-            {
-              selectedIndex === 5 && <AccountSetting/>
-            }
+            {selectedIndex === 0 && <GeneralSetting/>}
+            {filterContent && selectedIndex === 1 && <div>{filterContent}</div>}
+            {selectedIndex === (filterContent ? 2 : 1) && <ArticleShortcutSetting/>}
+            {selectedIndex === (filterContent ? 3 : 2) && <ConnectorSetting/>}
+            {selectedIndex === (filterContent ? 4 : 3) && <FeedsSetting/>}
+            {selectedIndex === (filterContent ? 5 : 4) && <FoldersSetting/>}
+            {selectedIndex === (filterContent ? 6 : 5) && <AccountSetting/>}
           </div>
         </div>
       </Box>

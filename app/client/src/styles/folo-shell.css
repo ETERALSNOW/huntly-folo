@@ -83,6 +83,7 @@ body {
   box-shadow: var(--fo-shadow);
   backdrop-filter: blur(20px);
   transition: width 0.2s ease, padding 0.2s ease;
+  overflow: hidden;
 }
 .main_sidebar.is-collapsed {
   width: 0;
@@ -97,6 +98,9 @@ body {
 
 .folo-shell.sidebar-collapsed .main_window {
   padding-left: 0;
+}
+.folo-shell.sidebar-expanded .main_window {
+  padding-left: calc(var(--fo-sidebar-width) + 24px);
 }
 
 .folo-shell__content {
