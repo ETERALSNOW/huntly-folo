@@ -516,7 +516,6 @@ const PageList = (props: PageListProps) => {
           </div>
         )}
         </div>
-      </div>
     </>
   );
 };
