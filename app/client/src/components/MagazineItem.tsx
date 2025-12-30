@@ -62,8 +62,13 @@ export default function MagazineItem({
 
   return (
     <Box
-      className={`w-full pt-3 pl-2 pr-2 hover:bg-blue-50 ${currentVisit ? "shadow shadow-blue-300 bg-blue-50" : ""}`}
+      className={`w-full folo-page-card ${currentVisit ? "folo-page-card--active" : ""}`}
       key={page.id}
+      sx={{
+        padding: {xs: 2.25, sm: 2.5},
+        borderColor: readed && showMarkReadOption ? 'rgba(12,10,9,0.08)' : undefined,
+        backgroundColor: readed && showMarkReadOption ? 'var(--fo-surface-subtle)' : 'var(--fo-surface-strong)',
+      }}
     >
       <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: ''}}>
         <Box className={"grow flex flex-col self-center"}>
@@ -72,11 +77,11 @@ export default function MagazineItem({
             <Link to={`/page/${page.id}`} onClick={(e) => pageSelect(e, page.id)}>
               <Box className={""}>
                 <Typography gutterBottom variant="subtitle1"
-                            className={`line-clamp-2 font-bold break-all ${readed && showMarkReadOption ? "text-neutral-500" : ""}`}>
+                            className={`line-clamp-2 font-bold break-all tracking-tight text-slate-900 ${readed && showMarkReadOption ? "text-neutral-500" : ""}`}>
                   {page.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary"
-                            className={`line-clamp-3 break-all  ${readed && showMarkReadOption ? "text-neutral-400" : ""}`}
+                            className={`line-clamp-3 break-all text-slate-600 ${readed && showMarkReadOption ? "text-neutral-400" : ""}`}
                             sx={{
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
@@ -92,7 +97,7 @@ export default function MagazineItem({
             isTweet && <TweetRoot tweetProps={tweetProps} page={page}/>
           }
 
-          <Box sx={{}} className={"flex items-center justify-between mt-1 text-[15px]"}>
+          <Box sx={{borderTop: '1px solid rgba(12,10,9,0.06)', paddingTop: 10}} className={"flex items-center justify-between mt-3 text-[15px] gap-3"}>
             <div className={'flex text-gray-500 items-center'}>
               <a href={page.url} target={"_blank"} className={'hover:underline'}>
                 <div className={"flex items-center flex-wrap"}>
@@ -227,12 +232,6 @@ export default function MagazineItem({
           </Link>
         }
       </Box>
-
-      <Box component={"hr"} sx={{
-        "background-color": "rgba(230, 230, 230, 1)",
-        border: 0,
-        height: '1px'
-      }} className={"mt-3 mb-0"}/>
 
     </Box>
   );

@@ -33,25 +33,35 @@ const StyledTreeItemRoot = styled(TreeItem)(({theme}) => ({
   color: theme.palette.text.primary,
   [`& .${treeItemClasses.content}`]: {
     color: theme.palette.text.primary,
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
+    borderRadius: 12,
     paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
+    paddingLeft: theme.spacing(1),
+    paddingTop: theme.spacing(0.75),
+    paddingBottom: theme.spacing(0.75),
+    marginBottom: theme.spacing(0.25),
+    border: `1px solid transparent`,
+    fontWeight: 600,
+    transition: 'all 0.18s ease',
     '&.Mui-expanded': {
       fontWeight: theme.typography.fontWeightRegular,
     },
     '&:hover': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: 'rgba(10, 132, 255, 0.06)',
+      borderColor: 'rgba(10, 132, 255, 0.18)',
+      transform: 'translateX(2px)',
     },
     '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
+      background: 'linear-gradient(90deg, rgba(10,132,255,0.12), rgba(255,92,0,0.07))',
+      borderColor: 'rgba(10, 132, 255, 0.28)',
       color: 'var(--tree-view-color)',
       fontWeight: theme.typography.fontWeightBold,
+      boxShadow: '0 10px 30px -18px rgba(7, 18, 43, 0.4)',
     },
     [`& .${treeItemClasses.label}`]: {
-      fontWeight: 'inherit',
+      fontWeight: 600,
       color: 'inherit',
-      paddingLeft: 0
+      paddingLeft: 0,
+      letterSpacing: '0.01em'
     },
     [`& .${treeItemClasses.iconContainer}`]: {
       marginRight: 0,
@@ -87,22 +97,22 @@ function StyledTreeItem(props: StyledTreeItemProps) {
       label={
         <ConditionalWrapper condition={linkTo}
                             wrapper={children => <NavLink to={linkTo}>{children}</NavLink>}>
-          <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0, pl: 0}}>
+          <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0, pl: 0}} className="folo-nav-item">
 
             {
               iconUrl && <Box component={'img'}
-                              color={iconColor || 'inherit'} sx={{mr: 1, width: 24, height: 24}} src={iconUrl}/>
+                              color={iconColor || 'inherit'} sx={{mr: 1, width: 28, height: 28}} src={iconUrl} className="folo-nav-item__icon"/>
             }
             {
-              !iconUrl && <Box component={LabelIcon} color={iconColor || 'inherit'} sx={{mr: 1}}/>
+              !iconUrl && <Box component={LabelIcon} color={iconColor || 'inherit'} sx={{mr: 1}} className="folo-nav-item__icon"/>
             }
             <Typography variant="body2" sx={{fontWeight: 'inherit', flexGrow: 1}}
-                        className={'whitespace-nowrap overflow-hidden overflow-ellipsis'}>
+                        className={'whitespace-nowrap overflow-hidden overflow-ellipsis folo-nav-item__label'}>
               {labelText}
             </Typography>
-            <Typography variant="caption" color="inherit" className={'leading-4'}>
+            {labelInfo && <Typography variant="caption" color="inherit" className={'leading-4 folo-nav-item__badge'}>
               {labelInfo}
-            </Typography>
+            </Typography>}
           </Box>
         </ConditionalWrapper>
       }

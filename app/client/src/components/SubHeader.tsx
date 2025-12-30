@@ -37,30 +37,30 @@ const SubHeader = (props: SubHeaderProps) => {
   const defaultBtnOptions: ButtonOptions = {markRead: true, viewSwitch: false, refresh: true};
   const buttonOptions = {...defaultBtnOptions, ...props.buttonOptions};
 
-  return <div className={'subheader w-full'}>
-    <div className={'flex content-between border-b-gray-500 pl-3 pr-3 pt-1 pb-1'}>
-      <div className={'flex items-center'}>
+  return <div className={'subheader folo-subheader w-full'}>
+    <div className={'flex content-between pl-3 pr-3 pt-2 pb-2 items-center'}>
+      <div className={'flex items-center gap-2'}>
         {
           navLabel.iconUrl ? <Box component={'img'}
                          sx={{mr: 1, width: 24, height: 24}} src={navLabel.iconUrl}/>
             : <SvgIcon component={navLabel.labelIcon} sx={{color: navLabel.iconColor}}/>
         }
-        <span className={'ml-1'}>{navLabel.labelText}</span>
-        {navLabelArea}
+        <span className={'ml-1 font-semibold'}>{navLabel.labelText}</span>
+        {navLabelArea && <div className="folo-chip ml-1">{navLabelArea}</div>}
       </div>
 
       <div className={'ml-auto'}>
-        <div className={'flex'}>
+        <div className={'flex gap-1'}>
           {
             buttonOptions.markRead && <div className={'group'}>
                   <Tooltip title={'Mark list as read'} placement={"left"}>
-                      <IconButton onClick={onMarkListAsRead}>
+                      <IconButton onClick={onMarkListAsRead} className="folo-icon-btn">
                           <CheckIcon/>
                       </IconButton>
                   </Tooltip>
                   <div className={"group-hover:flex hidden absolute flex-col"}>
                       <Tooltip title={'Mark all as read'} placement={"left"}>
-                          <IconButton onClick={onMarkAllAsRead}>
+                          <IconButton onClick={onMarkAllAsRead} className="folo-icon-btn">
                               <DoneAllIcon/>
                           </IconButton>
                       </Tooltip>
@@ -71,23 +71,23 @@ const SubHeader = (props: SubHeaderProps) => {
           {
             buttonOptions.viewSwitch && <div className={'group'}>
                   <Tooltip title={'Magazine view'} placement={"left"}>
-                      <IconButton>
+                      <IconButton className="folo-icon-btn">
                           <ListAltIcon/>
                       </IconButton>
                   </Tooltip>
                   <div className={"group-hover:flex hidden absolute flex-col"}>
                       <Tooltip title={'Column view'} placement={"left"}>
-                          <IconButton>
+                          <IconButton className="folo-icon-btn">
                               <VerticalSplitOutlinedIcon/>
                           </IconButton>
                       </Tooltip>
                       <Tooltip title={'List view'} placement={"left"}>
-                          <IconButton>
+                          <IconButton className="folo-icon-btn">
                               <ViewHeadlineOutlinedIcon/>
                           </IconButton>
                       </Tooltip>
                       <Tooltip title={'Expanded view'} placement={"left"}>
-                          <IconButton>
+                          <IconButton className="folo-icon-btn">
                               <ViewDayOutlinedIcon/>
                           </IconButton>
                       </Tooltip>
@@ -97,7 +97,7 @@ const SubHeader = (props: SubHeaderProps) => {
 
           {
             buttonOptions.refresh && <Tooltip title={'Refresh'} placement={"bottom"}>
-                  <IconButton onClick={onRefresh}>
+                  <IconButton onClick={onRefresh} className="folo-icon-btn">
                       <RefreshIcon/>
                   </IconButton>
               </Tooltip>
