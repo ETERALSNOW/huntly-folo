@@ -46,6 +46,9 @@ function App() {
   );
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'test') {
+      return;
+    }
     const location = window.location;
     if (location.pathname !== '/signin' && location.pathname !== "signup") {
       AuthControllerApiFactory().loginUserInfoUsingGET().then((res) => {
@@ -53,6 +56,8 @@ function App() {
           window.location.href = `/signin?${createSearchParams({
             'from': location.pathname,
           })}`;
+        } else if (location.pathname === '/') {
+          window.location.replace('/feeds');
         }
       });
     }

@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./folo-shell.css";
 
 #root {
     --primary: #eeeff4;
@@ -22,7 +23,7 @@ a {
 }
 
 .layoutRoot {
-    @apply pt-12;
+    padding-top: calc(var(--fo-header-height) + 16px);
 }
 
 .title_bar {
@@ -31,22 +32,19 @@ a {
     left: 0;
     width: 100%;
     -webkit-app-region: drag;
-    background: var(--primary);
-    @apply fixed h-12 items-center flex;
+    background: transparent;
+    @apply fixed flex;
 }
 
 .main_window {
-    padding-left: 270px;
+    padding-left: 0;
 }
 
 .main_sidebar {
-    position: fixed;
-    left: 0;
-    background: var(--secondary);
     color: #202124;
     overflow-y: auto;
     z-index: 200;
-    @apply w-[270px] h-full pr-3 pt-3 pb-3 shrink-0;
+    @apply h-full pr-3 pt-3 pb-3 shrink-0;
 }
 
 .slide-button {
@@ -89,7 +87,7 @@ a {
 /* 操作栏置顶 - 独立页面中，考虑顶部导航栏高度 (48px) */
 .main_window .page-detail-header {
     position: sticky;
-    top: 48px;
+    top: calc(var(--fo-header-height) + 6px);
     z-index: 40;
 }
 
@@ -109,7 +107,7 @@ a {
     flex-shrink: 0;
     padding-left: 20px;
     position: sticky;
-    top: 64px;
+    top: calc(var(--fo-header-height) + 20px);
     align-self: flex-start;
 }
 
@@ -254,7 +252,7 @@ a {
     }
 
     #root.toggle-sidebar .main_window {
-        padding-left: 270px;
+        padding-left: 0;
     }
 
     .page-list {
@@ -295,11 +293,6 @@ a {
     background-color: #a8bbbf;
 }
 
-.search-wrapper {
-    -webkit-app-region: no-drag;
-    @apply flex justify-center grow;
-}
-
 .nodrag {
     -webkit-app-region: no-drag;
 }
@@ -318,10 +311,9 @@ a {
 }
 
 .subheader {
-    background-color: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
     z-index: 100;
-    @apply sticky top-12;
+    top: calc(var(--fo-header-height) + 6px);
+    @apply sticky;
 }
 
 .separator {

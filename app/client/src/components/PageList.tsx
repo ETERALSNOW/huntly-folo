@@ -74,6 +74,10 @@ const PageList = (props: PageListProps) => {
   // ============ Basic State ============
   const selectedPageId = safeInt(params.get("p"));
   const propFilters = useMemo(() => props.filters || {}, [props.filters]);
+  const [rightCollapsed, setRightCollapsed] = useState<boolean>(() => {
+    const stored = localStorage.getItem('ui.rightPanelCollapsed');
+    return stored === 'true';
+  });
   const [filters, setFilters] = useState<PageListFilter>(propFilters);
   const [showDoneTip, setShowDoneTip] = useState(false);
   const [lastVisitPageId, setLastVisitPageId] = useState(0);
@@ -430,9 +434,9 @@ const PageList = (props: PageListProps) => {
       <SubHeader navLabel={navLabel} onMarkListAsRead={markListAsRead} onMarkAllAsRead={markAllAsRead}
                  onRefresh={refreshPages} navLabelArea={navLabelArea}
                  buttonOptions={buttonOptions}/>
-      <div className={'flex flex-auto'}>
+      <div className={`flex flex-auto gap-4 ${rightCollapsed ? 'right-panel-collapsed' : ''}`}>
         <div className="p-2 flex flex-col grow items-center">
-          <div className={'page-list w-[720px] flex flex-col items-center'} ref={pageListRef}>
+          <div className={'page-list w-full max-w-[920px] flex flex-col items-center gap-3'} ref={pageListRef}>
             {showDoneTip && <div className={'w-full'}>
                 <TransitionAlert severity="success" color="info">
                     <AlertTitle>Well done!</AlertTitle>
@@ -491,10 +495,27 @@ const PageList = (props: PageListProps) => {
             }
           </div>
         </div>
-        <div className={'filter-options w-[320px] sticky mt-3 top-28 self-start'}>
-          {props.filterComponent}
+        <div className={`filter-options w-[320px] folo-sticky-panel mt-3 self-start ${rightCollapsed ? 'hidden' : ''}`}>
+          {props.filterComponent && <div className="folo-panel p-3 relative">
+            <div className="absolute right-2 top-2">
+              <Button size="small" onClick={() => {
+                const next = !rightCollapsed;
+                setRightCollapsed(next);
+                localStorage.setItem('ui.rightPanelCollapsed', next ? 'true' : 'false');
+              }}>Hide</Button>
+            </div>
+            {props.filterComponent}
+          </div>}
         </div>
-      </div>
+        {rightCollapsed && (
+          <div className="mt-3 self-start">
+            <Button size="small" variant="outlined" onClick={() => {
+              setRightCollapsed(false);
+              localStorage.setItem('ui.rightPanelCollapsed', 'false');
+            }}>Show filters</Button>
+          </div>
+        )}
+        </div>
     </>
   );
 };
