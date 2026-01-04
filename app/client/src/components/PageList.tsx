@@ -4,6 +4,7 @@ import {InfiniteData, QueryClient, useInfiniteQuery, useQueryClient} from "@tans
 import {useInView} from "react-intersection-observer";
 import React, {ReactElement, useEffect, useState, useRef, useCallback, useMemo} from "react";
 import {AlertTitle, Button} from "@mui/material";
+import {useFilterPanel} from "../contexts/FilterPanelContext";
 import Loading from "./Loading";
 import {NavLabel} from "./Sidebar/NavLabels";
 import SubHeader, {ButtonOptions} from "./SubHeader";
@@ -70,6 +71,7 @@ const PageList = (props: PageListProps) => {
   const queryClient = useQueryClient();
   const [params, setParams] = useSearchParams();
   const { markReadOnScroll } = useGlobalSettings();
+  const { setFilterContent } = useFilterPanel();
 
   // ============ Basic State ============
   const selectedPageId = safeInt(params.get("p"));
@@ -396,6 +398,10 @@ const PageList = (props: PageListProps) => {
   }
 
   // ============ Effects ============
+  useEffect(() => {
+    setFilterContent(props.filterComponent || null);
+    return () => setFilterContent(null);
+  }, [props.filterComponent, setFilterContent]);
   // if there is no un read pages, then load all pages
   if (filters.markRead === false && data && data.pages && (data.pages.length === 0 || data.pages[0].length === 0)) {
     setShowDoneTip(true);
@@ -430,9 +436,9 @@ const PageList = (props: PageListProps) => {
       <SubHeader navLabel={navLabel} onMarkListAsRead={markListAsRead} onMarkAllAsRead={markAllAsRead}
                  onRefresh={refreshPages} navLabelArea={navLabelArea}
                  buttonOptions={buttonOptions}/>
-      <div className={'flex flex-auto'}>
+      <div className={`flex flex-auto gap-4`}>
         <div className="p-2 flex flex-col grow items-center">
-          <div className={'page-list w-[720px] flex flex-col items-center'} ref={pageListRef}>
+          <div className={'page-list w-full max-w-[920px] flex flex-col items-center gap-3'} ref={pageListRef}>
             {showDoneTip && <div className={'w-full'}>
                 <TransitionAlert severity="success" color="info">
                     <AlertTitle>Well done!</AlertTitle>
@@ -490,9 +496,6 @@ const PageList = (props: PageListProps) => {
                 </>
             }
           </div>
-        </div>
-        <div className={'filter-options w-[320px] sticky mt-3 top-28 self-start'}>
-          {props.filterComponent}
         </div>
       </div>
     </>

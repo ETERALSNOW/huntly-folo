@@ -158,11 +158,11 @@ export default function SearchBox() {
     <div className={'search-wrapper'}>
       <div
         className={
-          `search-box w-4/12 min-w-[700px] text-xs leading-6 text-slate-400 rounded-md shadow-sm pl-1 pr-1 border-slate-300 border border-solid ${focus ? "bg-white" : "bg-blue-50"}`
+          `search-box folo-search w-full max-w-[960px] text-sm leading-6 text-slate-600 rounded-xl shadow-sm pl-1 pr-1 border border-solid border-transparent ${focus ? "ring-1 ring-sky-500" : ""}`
         }
       >
         <form action={'/search'} className={'flex grow items-center'} onSubmit={searchSubmit}>
-          <IconButton aria-label={"search"} type={"submit"} className={''}>
+          <IconButton aria-label={"search"} type={"submit"} className={'folo-icon-btn'}>
             <SearchIcon fontSize="small"/>
           </IconButton>
           {/*<InputBase name={'q'} type={"text"} className={"w-full peer"} placeholder={'Search'} onFocus={inputFocus}*/}

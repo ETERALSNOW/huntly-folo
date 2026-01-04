@@ -12,25 +12,38 @@ import {useLocation} from "react-router-dom";
 import navLabels from "./NavLabels";
 import {ConnectorType} from "../../interfaces/connectorType";
 import SettingModal from "../SettingModal";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {useFilterPanel} from "../../contexts/FilterPanelContext";
 
-const Sidebar = () => {
+type SidebarProps = {
+  collapsed?: boolean
+}
+
+const Sidebar = ({collapsed}: SidebarProps) => {
   const location = useLocation();
+  const [collapseState, setCollapseState] = useState<boolean>(!!collapsed);
+  const {filterContent} = useFilterPanel();
+
+  useEffect(() => {
+    setCollapseState(!!collapsed);
+  }, [collapsed]);
 
   function leadingHeader(leadingText) {
-    return <div className={'pt-2 pl-6 pb-2 flex items-center'}>
-      <div className={'grow text-base leading-4 font-medium text-gray-400'}>
+    return <div className={'folo-nav-title'}>
+      <div className={'grow'}>
         {leadingText}
       </div>
       <div>
-        <IconButton onClick={() => {
-          if (leadingText === 'CONNECT') {
-            openConnectSettingModal();
-          } else {
-            openFeedsSettingModal();
-          }
-        }}>
-          <AddIcon fontSize={"small"} className={"text-gray-400"}/>
+        <IconButton
+          className="folo-icon-btn"
+          onClick={() => {
+            if (leadingText === 'CONNECT') {
+              openConnectSettingModal();
+            } else {
+              openFeedsSettingModal();
+            }
+          }}>
+          <AddIcon fontSize={"small"} className={"text-gray-500"}/>
         </IconButton>
       </div>
     </div>;
@@ -38,8 +51,10 @@ const Sidebar = () => {
 
   function folderConnectorsView(folderConnectorsArray: FolderConnectors[], isRss: boolean) {
     const treeItems = folderConnectorsToTreeItems(folderConnectorsArray, isRss);
-    return <NavTreeView treeItems={treeItems} ariaLabel={isRss ? 'rss' : 'connectors'} defaultExpanded={[]}
-                        selectedNodeId={location.pathname}/>
+    return <div className="folo-nav-card">
+      <NavTreeView treeItems={treeItems} ariaLabel={isRss ? 'rss' : 'connectors'} defaultExpanded={[]}
+                   selectedNodeId={location.pathname}/>
+    </div>
   }
 
 
@@ -101,8 +116,6 @@ const Sidebar = () => {
   }
 
   const {
-    isLoading,
-    error,
     data: view,
   } = useQuery(['folder-connector-view'], async () => (await
     ConnectorControllerApiFactory().getFolderConnectorViewUsingGET()).data, {
@@ -114,28 +127,36 @@ const Sidebar = () => {
   const [settingIndex, setSettingIndex] = useState(0);
 
   const openConnectSettingModal = useCallback(() => {
-    setSettingIndex(2);
+    setSettingIndex(filterContent ? 3 : 2);
     setSettingModalOpen(true);
-  }, []);
+  }, [filterContent]);
 
   const openFeedsSettingModal = useCallback(() => {
-    setSettingIndex(3);
+    setSettingIndex(filterContent ? 4 : 3);
     setSettingModalOpen(true);
-  }, []);
+  }, [filterContent]);
 
   const closeSettingModal = useCallback(() => {
     setSettingModalOpen(false);
   }, []);
 
   return (
-    <div className={`${styles.sidebar} pb-14`}>
-      <LibraryNavTree selectedNodeId={location.pathname}/>
+    <div className={`${styles.sidebar} pb-14 space-y-4 ${collapseState ? styles.collapsed : ''}`}>
+      <div className="folo-nav-section">
+        {leadingHeader('FEEDS')}
+        {view && view.folderConnectors && folderConnectorsView(view.folderFeedConnectors, true)}
+      </div>
 
-      {leadingHeader('CONNECT')}
-      {view && view.folderConnectors && folderConnectorsView(view.folderConnectors, false)}
+      <div className="folo-nav-section">
+        <div className="folo-nav-card">
+          <LibraryNavTree selectedNodeId={location.pathname}/>
+        </div>
+      </div>
 
-      {leadingHeader('FEEDS')}
-      {view && view.folderConnectors && folderConnectorsView(view.folderFeedConnectors, true)}
+      <div className="folo-nav-section">
+        {leadingHeader('CONNECT')}
+        {view && view.folderConnectors && folderConnectorsView(view.folderConnectors, false)}
+      </div>
 
       {
         settingModalOpen &&

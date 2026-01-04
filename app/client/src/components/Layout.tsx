@@ -1,15 +1,39 @@
-import React, {useEffect} from "react";
-import {CssBaseline, StyledEngineProvider} from "@mui/material";
+import React, {useEffect, useMemo, useRef, useState} from "react";
+import {CssBaseline, StyledEngineProvider, useMediaQuery} from "@mui/material";
 import Sidebar from "./Sidebar/Sidebar";
 import {Outlet, ScrollRestoration, useLocation} from "react-router-dom";
 import Header from "./Header";
+import {FilterPanelProvider} from "../contexts/FilterPanelContext";
 
 const Layout = () => {
   const location = useLocation();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const isMobile = useMediaQuery("(max-width:1024px)");
+  const wasMobileRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('ui.sidebarCollapsed');
+    if (stored != null) {
+      setSidebarCollapsed(stored === 'true');
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('ui.sidebarCollapsed', sidebarCollapsed ? 'true' : 'false');
+  }, [sidebarCollapsed]);
+
+  useEffect(() => {
+    if (isMobile && !wasMobileRef.current) {
+      setSidebarCollapsed(true);
+    }
+    wasMobileRef.current = isMobile;
+  }, [isMobile]);
+
   useEffect(() => {
     const rootEl = document.getElementById('root');
     rootEl?.classList.remove('toggle-sidebar');
   },[location]);
+  const rootClassName = useMemo(() => `h-full layoutRoot folo-shell ${sidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'}`, [sidebarCollapsed]);
   
   return (
     <StyledEngineProvider injectFirst>
@@ -25,17 +49,19 @@ const Layout = () => {
             location.key;
         }}
       />
-      <div className="h-full layoutRoot">
-        <Header />
-        <div className="main_window flex flex-row">
-          <div className="main_sidebar">
-            <Sidebar/>
-          </div>
-          <div className="flex-auto">
-            <Outlet/>
+      <FilterPanelProvider>
+        <div className={rootClassName}>
+          <Header onSidebarToggle={() => setSidebarCollapsed(!sidebarCollapsed)} sidebarCollapsed={sidebarCollapsed} />
+          <div className="main_window folo-shell__body flex flex-row">
+            <div className={`main_sidebar folo-shell__sidebar folo-panel ${sidebarCollapsed ? 'is-collapsed' : ''}`}>
+              <Sidebar collapsed={sidebarCollapsed}/>
+            </div>
+            <div className="flex-auto folo-shell__content">
+              <Outlet/>
+            </div>
           </div>
         </div>
-      </div>
+      </FilterPanelProvider>
     </StyledEngineProvider>
   );
 };

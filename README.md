@@ -121,6 +121,21 @@ See the [Run the Server wiki](https://github.com/lcomplete/huntly/wiki/Run-the-S
 
 **Enjoy it!**
 
+### Web UI shell (Folo-inspired)
+
+- Run the reskinned web client locally:
+  ```bash
+  cd app/client
+  yarn install
+  yarn start
+  ```
+- See `docs/ui-shell-integration.md` for the layout/theme map and `docs/folo-ui-compliance.md` for the AGPL-inspired notice.
+
+### Testing (Jest + ESM note)
+
+- CRA’s Jest setup cannot parse some ESM-only deps (e.g., `react-markdown`) out of the box. Tests mock those modules in `src/setupTests.ts` so `CI=true yarn test --watch=false --runInBand` succeeds.
+- If you add new ESM-only packages, either mock them in `setupTests.ts` or configure a transformer override before enabling them in tests.
+
 ## Become a Sponsor
 
 If you find Huntly helpful, please consider supporting its development!
